@@ -1,8 +1,15 @@
+//! By convention, main.zig is where your main function lives in the case that
+//! you are building an executable. If you are making a library, the convention
+//! is to delete this file and start with root.zig instead.
 const std = @import("std");
+
+/// This imports the separate module containing `root.zig`. Take a look in `build.zig` for details.
+pub const lib = @import("zig_001_helloworld_lib");
 
 pub fn main() !void {
     // Prints to stderr (it's a shortcut based on `std.io.getStdErr()`)
     std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+    std.debug.print("2 + 3 = {}\n", .{lib.add(2, 3)});
 
     // stdout is for the actual output of your application, for example if you
     // are implementing gzip, then only the compressed bytes should be sent to
@@ -13,12 +20,12 @@ pub fn main() !void {
 
     try stdout.print("Run `zig build test` to run the tests.\n", .{});
 
-    try bw.flush(); // don't forget to flush!
+    try bw.flush(); // Don't forget to flush!
 }
 
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
+pub fn simpleAdd(comptime T: type, a: T, b: T) T {
+    if (T == @TypeOf(lib.add(2, 3))) {
+        return lib.add(a, b);
+    }
+    return a + b;
 }
