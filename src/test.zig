@@ -33,4 +33,7 @@ test "main module" {
     try testing.expectEqual(5, exe.simpleAdd(u8, 2, 3));
     try testing.expectEqual(5, exe.simpleAdd(i32, 2, 3));
     try testing.expectEqual(5, exe.lib.add(2, 3));
+    try testing.expectEqual(22, std.math.mod(i32, -2, 24));
+    try testing.expectEqual(-1, std.math.divFloor(i32, -2, 24));
+    try testing.expectEqual(-3, std.math.divFloor(i32, -150, 60));
 }
